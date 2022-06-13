@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   nginx:
-    image: nginx:1.15-alpine
+    image: nginx:stable-alpine
     ports:
       - 80:80
       - 443:443
@@ -11,8 +11,8 @@ services:
       - ./conf/auth:/auth
     restart: always
     environment:
-      - DOMAIN={DOCKER_REGISTRY_DOMAIN_NAME}
-    command: "sh -c '/usr/sbin/nginx && nc -v -l -p 12345 -e nginx -s reload'"
+      - DOMAIN=${DOCKER_REGISTRY_DOMAIN_NAME}
+    command: sh -c "envsubst '$$DOMAIN' < /etc/nginx/conf.d/app.template > /etc/nginx/conf.d/app.conf && /usr/sbin/nginx && nc -v -l -p 12345 -e nginx -s reload"
   certbot:
     build:
       context: certbot
@@ -27,7 +27,7 @@ services:
     environment:
       - LOGFILE=/var/log/letsencrypt/certrenewal.log
       - DEBUG=false
-      - STAGING=true
+      - STAGING=false
       - HEALTH_CHECK_URL=${DOCKER_REGISTRY_DOMAIN_NAME}:80
       - DOMAINS=${DOCKER_REGISTRY_DOMAIN_NAME}
       - EMAIL=${DOCKER_REGISTRY_CERT_EMAIL_ADDRESS}

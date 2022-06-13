@@ -1,4 +1,4 @@
-FROM certbot/certbot:v0.18.2
+FROM certbot/certbot
 
 VOLUME /certs
 VOLUME /etc/letsencrypt

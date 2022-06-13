@@ -7,9 +7,8 @@ map $upstream_http_docker_distribution_api_version $docker_distribution_api_vers
 }
 
 server {
-    set_by_lua $envdomain 'return os.getenv("DOMAIN")';
     listen 80;
-    server_name $envdomain;
+    server_name ${DOMAIN};
 
     location /.well-known/acme-challenge/ {
         proxy_pass http://certbot:80;
@@ -20,19 +19,17 @@ server {
     }
 }
 server {
-    set_by_lua $envdomain 'return os.getenv("DOMAIN")';
     listen 443 ssl;
 
-    ssl_certificate /certs/$envdomain.fullchain.pem;
-    ssl_certificate_key /certs/$envdomain.key.pem;
-    server_name $envdomain;
+    ssl_certificate /certs/${DOMAIN}.fullchain.pem;
+    ssl_certificate_key /certs/${DOMAIN}.key.pem;
+    server_name ${DOMAIN};
 
     location / {
         proxy_pass http://registryui:443;
     }
 
-    # Recommendations from https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-    ssl_protocols TLSv1.1 TLSv1.2;
+    ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
