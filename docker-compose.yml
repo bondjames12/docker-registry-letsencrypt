@@ -27,7 +27,7 @@ services:
     environment:
       - LOGFILE=/var/log/letsencrypt/certrenewal.log
       - DEBUG=false
-      - STAGING=true
+      - STAGING=false
       - HEALTH_CHECK_URL=${DOCKER_REGISTRY_DOMAIN_NAME}:80
       - DOMAINS=${DOCKER_REGISTRY_DOMAIN_NAME}
       - EMAIL=${DOCKER_REGISTRY_CERT_EMAIL_ADDRESS}
