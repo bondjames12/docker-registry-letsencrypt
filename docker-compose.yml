@@ -1,3 +1,4 @@
+
 version: '2.1'
 services:
   nginx:
@@ -18,6 +19,7 @@ services:
       context: certbot
       dockerfile: Dockerfile
     container_name: certbot
+    hostname: certbot
     ports:
       - 81:80
     volumes:
@@ -48,3 +50,16 @@ services:
       - ENV_DOCKER_REGISTRY_PORT=443
       - ENV_DOCKER_REGISTRY_USE_SSL=1
     restart: always
+
+  nugetserver:
+    image: tomzo/liget:latest
+    hostname: nugetserver
+    ports:
+      - 127.0.0.1:5001:9011
+    volumes:
+      - ./data/nuget/data:/data
+    restart: always
+    environment:
+      - LIGET_API_KEY_HASH=${NUGET_APIKEY_HASH}
+      - LIGET_IMPORT_ON_BOOT=/data/import
+
