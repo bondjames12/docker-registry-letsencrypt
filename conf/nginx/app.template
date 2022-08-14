@@ -73,7 +73,7 @@ server {
         auth_basic "Registry realm";
         auth_basic_user_file /auth/htpasswd;
 
-        proxy_pass                          http://dockre-nugetserver;
+        proxy_pass                          http://docker-nugetserver;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr; # pass on real client's IP
         proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
