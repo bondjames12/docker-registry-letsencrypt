@@ -52,6 +52,8 @@ basic http authentication.
 | http://registry.docklab.de/ | /* | no | nginx:443 |
 | https://registry.docklab.de/v2/ | /v2/* | yes | registry:5000 | 
 | https://registry.docklab.de/ | /* | yes | registryui:80 |    
+| https://registry.docklab.de/ | /api/v2/package | yes | nugetserver:5001 |    
+| https://registry.docklab.de/ | /api/v3/* | yes | nugetserver:5001 |    
 
 You can get more detailed information by reading the docker documention [here.](https://docs.docker.com/registry/recipes/nginx/)
 
@@ -109,5 +111,9 @@ certificates to `/etc/apache2/server.key` and `/etc/apache2/server.crt` and set 
     volumes:
       - ./certs/server.key:/etc/apache2/server.key:ro
       - ./certs/server.crt:/etc/apache2/server.crt:ro
+      
+### NuGet Feed
+
+A LiGet server (https://github.com/ai-traders/liget). Running on localhost port 5001, browser avaliable endpoints at http://localhost:5001/api/v3/index.json
       
       
