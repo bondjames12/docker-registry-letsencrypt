@@ -7,7 +7,7 @@ map $upstream_http_docker_distribution_api_version $docker_distribution_api_vers
 }
 
 upstream docker-nugetserver {
-    server nugetserver:5001;
+    server nugetserver:9011;
 }
 
 server {
