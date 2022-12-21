@@ -28,7 +28,7 @@ services:
       - ./data/certbot/var_log_letsencrypt:/var/log/letsencrypt
     environment:
       - LOGFILE=/var/log/letsencrypt/certrenewal.log
-      - DEBUG=false
+      - DEBUG=true
       - STAGING=false
       - HEALTH_CHECK_URL=${DOCKER_REGISTRY_DOMAIN_NAME}:80
       - DOMAINS=${DOCKER_REGISTRY_DOMAIN_NAME}
@@ -44,7 +44,7 @@ services:
   registryui:
     image: konradkleine/docker-registry-frontend:v2
     ports:
-      - 444:443
+      - 127.0.0.1:444:443
     environment:
       - ENV_DOCKER_REGISTRY_HOST=${DOCKER_REGISTRY_DOMAIN_NAME}
       - ENV_DOCKER_REGISTRY_PORT=443

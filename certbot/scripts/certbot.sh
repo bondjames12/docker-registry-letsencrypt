@@ -22,7 +22,9 @@ log_lvl_info() {
 }
 
 issueCertificate() {
-  certbot certonly --agree-tos --renew-by-default --non-interactive --max-log-backups 100 --email $EMAIL $CERTBOT_ARGS -d $1 &>/dev/null
+  log_lvl_info "issueCertificate Running Email:$EMAIL Certbot Args:$CERTBOT_ARGS Arg1:$1"
+  log_lvl_info "certbot certonly -vvv --agree-tos --renew-by-default --non-interactive --max-log-backups 100 --email $EMAIL $CERTBOT_ARGS -d $1"
+  certbot certonly -vvv --agree-tos --renew-by-default --non-interactive --max-log-backups 100 --email $EMAIL $CERTBOT_ARGS -d $1 >> ${LOGFILE}
   return $?
 }
 
@@ -68,15 +70,17 @@ processCertificates() {
 
         # look for certificate additional domain names and append them as '-d <name>' (-d for certbot's --domains option)
         for altname in ${subjectaltnames}; do
-          if [ "${altname}" != "${subject}" ]; then
+          if [ "${altname}" != "${subject}" ] && ["${altname}" != ""]; then
             domains="${domains} -d ${altname}"
+          fi
+          if ["${subject}" == ""] && ["${altname}" != ""; then
+            domains="${altname}"
           fi
         done
 
         # renewing certificate
         log_lvl_info "Renewing certificate for $domains"
-        issueCertificate "${domains}"
-
+        issueCertificate "${CERT_DOMAIN}"
         if [ $? -ne 0 ]; then
           log_lvl_error "Failed to renew certificate! check /var/log/letsencrypt/letsencrypt.log!"
           exitcode=1
